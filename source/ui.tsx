@@ -20,8 +20,7 @@ const App = () =>
 			exactly:1,
 			maxLength:5,
 
-	   })[0].toUpperCase()
-	}
+	   })[0].toUpperCase()	}
 	const [word] = useState(()=>{
 		let rword = getRWord()
 	   while(rword.length!==5){
@@ -60,15 +59,24 @@ useInput((input,key)=>{
 		let wMatrix = [...wordMatrix]
 		let wordArr = word.split('')
 		let arr = wMatrix[r]
+		let potentialArr = []
 		arr.forEach((l,i)=>{
 			let letter = l.letter
 			let letterRandom = wordArr[i]
 			if(letter === letterRandom){
 				l.bgColor = 'green'
 				arr[i] = l
+				potentialArr.forEach((el)=>{
+					if(el.index !== i && el.descriptor.letter === l.letter){
+						arr[el.index] = {...el.descriptor,bgColor:'gray'}
+						setIncorrectLetters((prev)=>[...prev,el.descriptor.letter])
+					}
+				})
 			}else if (wordArr.find((rnd)=>rnd === letter)){
 				l.bgColor = "yellow"
+
 				arr[i] = l
+				potentialArr.push({descriptor:l,index:i})
 			}else{
 				setIncorrectLetters((prev)=>[...prev,letter])
 				l.bgColor = "gray"

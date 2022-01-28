@@ -88,16 +88,24 @@ var App = function () {
             var wMatrix = __spreadArray([], wordMatrix, true);
             var wordArr_1 = word.split('');
             var arr_1 = wMatrix[r];
+            var potentialArr_1 = [];
             arr_1.forEach(function (l, i) {
                 var letter = l.letter;
                 var letterRandom = wordArr_1[i];
                 if (letter === letterRandom) {
                     l.bgColor = 'green';
                     arr_1[i] = l;
+                    potentialArr_1.forEach(function (el) {
+                        if (el.index !== i && el.descriptor.letter === l.letter) {
+                            arr_1[el.index] = __assign(__assign({}, el.descriptor), { bgColor: 'gray' });
+                            setIncorrectLetters(function (prev) { return __spreadArray(__spreadArray([], prev, true), [el.descriptor.letter], false); });
+                        }
+                    });
                 }
                 else if (wordArr_1.find(function (rnd) { return rnd === letter; })) {
                     l.bgColor = "yellow";
                     arr_1[i] = l;
+                    potentialArr_1.push({ descriptor: l, index: i });
                 }
                 else {
                     setIncorrectLetters(function (prev) { return __spreadArray(__spreadArray([], prev, true), [letter], false); });
